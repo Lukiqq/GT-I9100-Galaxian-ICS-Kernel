@@ -1,0 +1,7 @@
+/* This file is auto generated, version Note */
+/* SMP PREEMPT */
+#define UTS_MACHINE "arm"
+#define UTS_VERSION "#Note SMP PREEMPT Sat Jul 28 00:00:15 CEST 2012"
+#define LINUX_COMPILE_BY "luki"
+#define LINUX_COMPILE_HOST "CentOS"
+#define LINUX_COMPILER "gcc version 4.4.3 (GCC) "
