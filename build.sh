@@ -26,9 +26,11 @@ rm zImage
 cd ../../../
 check_errs
 
+make clean
+
 CPUs=`grep 'processor' /proc/cpuinfo | wc -l` # Return the number of current machine CPUs
 echo Purging old compiled modules...
-find . -name *.ko -exec rm -f {} \; # remove any old compiled modules (in case the new .config removed someone)
+find . -name '*.ko' -exec rm -f {} \;
 check_errs
 
 echo
@@ -40,7 +42,10 @@ check_errs
 
 echo
 echo Copying all compiled modules into the initramfs folder...
-find . -name *.ko -exec cp -f {} initramfs/lib/modules \; # copy all new compiled modules in the initramfs/lib/modules folder
+cd drivers/
+
+find . -name '*.ko' -exec cp -f {} ../initramfs/lib/modules/ \;
+cd ..
 check_errs
 
 echo
