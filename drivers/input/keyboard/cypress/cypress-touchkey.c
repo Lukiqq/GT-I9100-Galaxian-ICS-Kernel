@@ -46,6 +46,8 @@
 
 /* M0 Touchkey temporary setting */
 
+#define LED_LDO_WITH_REGULATOR
+
 #if defined(CONFIG_MACH_M0) || defined(CONFIG_MACH_C1VZW) || defined(CONFIG_MACH_C2)
 #define CONFIG_MACH_Q1_BD
 #elif defined(CONFIG_MACH_C1) && !defined(CONFIG_TARGET_LOCALE_KOR)

@@ -49,13 +49,12 @@
 #include <linux/suspend.h>
 #endif
 
-#if defined(CONFIG_MACH_U1_BD) && defined(CONFIG_TARGET_LOCALE_KOR)
 #include <mach/regs-clock.h>
 #include "boot_progressbar.h"
-#define DISPLAY_BOOT_PROGRESS
-#endif
 #include <mach/regs-pmu.h>
 #include <plat/regs-fb-s5p.h>
+
+#define DISPLAY_BOOT_PROGRESS
 
 struct s3cfb_fimd_desc		*fbfimd;
 
@@ -421,6 +420,8 @@ static int s3cfb_probe(struct platform_device *pdev)
 
 		fbdev[i]->system_state = POWER_ON;
 
+		spin_lock_init(&fbdev[i]->slock);
+
 		/* alloc fb_info */
 		if (s3cfb_alloc_framebuffer(fbdev[i], i)) {
 			dev_err(fbdev[i]->dev, "alloc error fimd[%d]\n", i);
@@ -702,7 +703,9 @@ void s3cfb_early_suspend(struct early_suspend *h)
 
 		if (fbdev[i]->regs) {
 			fbdev[i]->regs_org = fbdev[i]->regs;
+			spin_lock(&fbdev[i]->slock);
 			fbdev[i]->regs = 0;
+			spin_unlock(&fbdev[i]->slock);
 		}
 
 		if (pdata->clk_off)
@@ -778,6 +781,7 @@ void s3cfb_late_resume(struct early_suspend *h)
 
 		if (pdata->set_display_path)
 			pdata->set_display_path();
+
 #ifdef CONFIG_FB_S5P_MDNIE
 		s3cfb_set_dualrgb(fbdev[i], S3C_DUALRGB_MDNIE);
 #endif
